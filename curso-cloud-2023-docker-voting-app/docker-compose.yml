@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  voter:
+    build: ./vote
+    depends_on:
+      - redis
+    ports:
+      - "80:80"
+
+  worker:
+    build: ./worker
+    depends_on:
+      - redis
+      - postgres
+
+  result:
+    build: ./result
+    depends_on:
+      - postgres
+    ports:
+      - "8080:80"
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis:alpine
