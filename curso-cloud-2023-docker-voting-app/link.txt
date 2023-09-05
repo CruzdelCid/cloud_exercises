@@ -1,0 +1,1 @@
+https://github.com/CruzdelCid/cloud_exercises/blob/main/curso-cloud-2023-docker-voting-app/docker-compose.yml
