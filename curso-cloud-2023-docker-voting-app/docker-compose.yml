@@ -6,12 +6,17 @@ services:
       - redis
     ports:
       - "80:80"
+    networks:
+      - voter_net
 
   worker:
     build: ./worker
     depends_on:
       - redis
       - db
+    networks:
+      - voter_net
+      - result_net
 
   result:
     build: ./result
@@ -19,6 +24,8 @@ services:
       - db
     ports:
       - "8080:80"
+    networks:
+      - result_net
 
   db:
     image: postgres:15-alpine
@@ -26,6 +33,22 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - result_net
 
   redis:
     image: redis:alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - voter_net
+
+volumes:
+    postgres_data:
+    redis_data:
+
+networks:
+  voter_net:
+  result_net: 
